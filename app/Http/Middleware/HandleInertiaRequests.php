@@ -1,0 +1,132 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Middleware;
+
+class HandleInertiaRequests extends Middleware
+{
+    /**
+     * The root template that's loaded on the first page visit.
+     *
+     * @see https://inertiajs.com/server-side-setup#root-template
+     *
+     * @var string
+     */
+    protected $rootView = 'app';
+
+    /**
+     * Determines the current asset version.
+     *
+     * @see https://inertiajs.com/asset-versioning
+     */
+    public function version(Request $request): ?string
+    {
+        return parent::version($request);
+    }
+
+    /**
+     * Define the props that are shared by default.
+     *
+     * @see https://inertiajs.com/shared-data
+     *
+     * @return array<string, mixed>
+     */
+    public function share(Request $request): array
+    {
+        return [
+            ...parent::share($request),
+            'auth' => [
+                'user' => $this->getAuthUser('web'),
+                'client' => $this->getAuthUser('client'),
+                'check' => $this->isAuthenticated(),
+                'type' => $this->getAuthType(),
+            ],
+            'flash' => [
+                'success' => fn() => $request->session()->get('success'),
+                'error' => fn() => $request->session()->get('error'),
+                'message' => fn() => $request->session()->get('message'),
+                'success_tracking' => fn() => $request->session()->get('success_tracking'),
+                'booking_reference' => fn() => $request->session()->get('booking_reference'),
+                'quote_reference' => fn() => $request->session()->get('quote_reference'),
+                'whatsapp_link' => fn() => $request->session()->get('whatsapp_link'),
+            ],
+            'site' => function () {
+                $defaultBank = \App\Models\BusinessBankAccount::where('is_default', true)->first()
+                    ?? \App\Models\BusinessBankAccount::orderBy('sort_order')->first();
+                $bankName = $defaultBank?->bank_name ?? \App\Models\Setting::get('bank_name', 'First Bank of Nigeria');
+                $accountName = $defaultBank?->account_name ?? \App\Models\Setting::get('bank_account_name', 'KUIT LIMITED');
+                $accountNumber = $defaultBank?->account_number ?? \App\Models\Setting::get('bank_account_number', '');
+
+                return [
+                    'name' => \App\Models\Setting::get('company_name', 'KUIT LIMITED'),
+                    'rc_number' => \App\Models\Setting::get('rc_number', 'RC 806865'),
+                    'logo_url' => \App\Models\Setting::get('site_logo_url') ?: asset('images/logo.png'),
+                    'tagline' => \App\Models\Setting::get('tagline', 'Marine | Construction | Engineering Services'),
+                    'phone' => \App\Models\Setting::get('phone', '(+234) 803 280 2038'),
+                    'secondary_phone' => \App\Models\Setting::get('secondary_phone', '(+234) 703 344 2821'),
+                    'whatsapp' => \App\Models\Setting::get('whatsapp', '+2348032802038'),
+                    'email' => \App\Models\Setting::get('email', 'info@kuitltd.com'),
+                    'website' => 'https://kuitltd.com',
+                    'address' => \App\Models\Setting::get('address', '132, Airport Road, Effurun-Warri, Delta State, Nigeria'),
+                    'coverage_scope' => \App\Models\Setting::get('coverage_scope', 'Effurun-Warri, Delta State & Nationwide Operations'),
+                    'bank_name' => $bankName,
+                    'bank_account_name' => $accountName,
+                    'bank_account_number' => $accountNumber,
+                    'account_name' => $accountName,
+                    'account_number' => $accountNumber,
+                    'enable_profile_download' => filter_var(\App\Models\Setting::get('enable_company_profile_download', 'true'), FILTER_VALIDATE_BOOLEAN),
+                    'company_profile_url' => \App\Models\Setting::get('company_profile_url', '/docs/kuit-limited-company-profile.pdf') ?: '/docs/kuit-limited-company-profile.pdf',
+                ];
+            },
+            'support' => [
+                'phone' => \App\Models\Setting::get('phone', '(+234) 803 280 2038'),
+                'secondary_phone' => \App\Models\Setting::get('secondary_phone', '(+234) 703 344 2821'),
+                'phone_whatsapp' => \App\Models\Setting::get('phone_whatsapp') ?: \App\Models\Setting::get('whatsapp', '2348032802038'),
+                'whatsapp' => \App\Models\Setting::get('whatsapp', '+2348032802038'),
+                'email' => \App\Models\Setting::get('email', 'info@kuitltd.com'),
+                'location' => \App\Models\Setting::get('address', '132, Airport Road, Effurun-Warri, Delta State, Nigeria'),
+                'coverage_scope' => \App\Models\Setting::get('coverage_scope', 'Effurun-Warri, Delta State & Nationwide Operations'),
+            ],
+            'nav' => [
+                'service_categories' => fn() => \App\Models\ServiceCategory::with(['services' => fn($q) => $q->published()->select('id', 'category_id', 'name', 'slug')])->get(['id', 'name', 'slug', 'icon']),
+                'product_categories' => fn() => \App\Models\ProductCategory::select('id', 'name', 'slug', 'icon')->get(),
+            ],
+            'cart' => [
+                'count' => fn() => $this->getCartCount($request),
+            ],
+            'csrf_token' => csrf_token(),
+            'turnstileSiteKey' => config('services.turnstile.site_key'),
+        ];
+    }
+
+    protected function getCartCount(Request $request): int
+    {
+        $sessionId = $request->session()->getId();
+        $cart = \App\Models\Cart::where('session_id', $sessionId)
+            ->when(Auth::check(), fn($q) => $q->orWhere('user_id', Auth::id()))
+            ->first();
+        return $cart ? $cart->items()->sum('qty') : 0;
+    }
+
+    protected function getAuthUser($guard)
+    {
+        return fn() => Auth::guard($guard)->check() ? Auth::guard($guard)->user() : null;
+    }
+
+    protected function isAuthenticated()
+    {
+        return fn() => Auth::guard('web')->check() || Auth::guard('client')->check();
+    }
+
+    protected function getAuthType()
+    {
+        if (Auth::guard('web')->check())
+            return 'staff';
+        if (Auth::guard('client')->check())
+            return 'client';
+        return null;
+    }
+}

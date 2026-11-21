@@ -1,0 +1,220 @@
+<?php
+
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\TestimonyController;
+use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Public\HomeController;
+use App\Http\Controllers\Public\ServiceController;
+use App\Http\Controllers\Public\ProductController;
+use App\Http\Controllers\Public\ProjectController;
+use App\Http\Controllers\Public\QuoteController;
+use App\Http\Controllers\Public\BookingController;
+use App\Http\Controllers\Public\PageController;
+use App\Http\Controllers\Public\CommerceController;
+use App\Http\Controllers\Public\SitemapController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Admin\MaintenancePlanController as AdminPlanController;
+use App\Http\Controllers\Admin\StateFeeController as AdminStateFeeController;
+use App\Http\Controllers\Invoice\InvoiceController;
+use App\Http\Controllers\Invoice\InvoicePdfController;
+use App\Http\Controllers\Invoice\InvoicePreviewController;
+use App\Http\Controllers\Invoice\InvoicePublicController;
+use App\Http\Controllers\Invoice\InvoiceItemSuggestionController;
+use App\Http\Controllers\Invoice\CustomerController;
+use App\Http\Controllers\Invoice\CatalogController;
+use App\Http\Controllers\Invoice\TemplateController;
+use App\Http\Controllers\Invoice\BusinessProfileController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+// ── Public Routes (SSR & SEO Optimized) ─────────────────────────────────────
+Route::get('/', HomeController::class)->name('home');
+Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+Route::post('/contact', [PageController::class, 'submitContact'])->name('contact.store');
+Route::get('/faq', [PageController::class, 'faq'])->name('faq');
+Route::get('/maintenance-plans', [PageController::class, 'maintenancePlans'])->name('plans.index');
+
+// Blog & Testimonials Public Routes
+Route::get('/blog', [BlogController::class, 'publicIndex'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'publicShow'])->name('blog.show');
+Route::get('/testimonials', [TestimonyController::class, 'publicIndex'])->name('testimonials.index');
+Route::post('/testimonials', [TestimonyController::class, 'publicStore'])->name('testimonials.store');
+
+// Legal pages
+Route::get('/privacy-policy', fn() => app(PageController::class)->legal('privacy-policy'))->name('pages.privacy');
+Route::get('/terms', fn() => app(PageController::class)->legal('terms'))->name('pages.terms');
+Route::get('/warranty', fn() => app(PageController::class)->legal('warranty'))->name('pages.warranty');
+Route::get('/refund-policy', fn() => app(PageController::class)->legal('refund-policy'))->name('pages.refund');
+
+// Services (5 Core Pillars)
+Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('services.show');
+
+// Equipment & Fleet Leasing
+Route::get('/equipment', [PageController::class, 'equipment'])->name('equipment.index');
+
+// Packages / Shop
+Route::get('/packages', [ProductController::class, 'index'])->name('packages.index');
+Route::get('/packages/{category}', [ProductController::class, 'category'])->name('packages.category');
+Route::get('/packages/{category}/{slug}', [ProductController::class, 'show'])->name('packages.show');
+
+// Projects & Video Proof
+Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+Route::get('/projects/{slug}', [ProjectController::class, 'show'])->name('projects.show');
+
+// Quotes & Bookings
+Route::get('/request-quote', [QuoteController::class, 'create'])->name('quotes.create');
+Route::get('/quote', [QuoteController::class, 'create'])->name('quote.create');
+Route::post('/request-quote', [QuoteController::class, 'store'])->name('quotes.store');
+Route::post('/quote', [QuoteController::class, 'store'])->name('quote.store');
+
+Route::get('/book-installation', [BookingController::class, 'create'])->name('bookings.create');
+Route::get('/book', [BookingController::class, 'create'])->name('booking.create');
+Route::redirect('/book-appointment', '/book-installation')->name('book-appointment');
+Route::redirect('/appointments', '/book-installation')->name('appointments.index');
+Route::post('/book-installation', [BookingController::class, 'store'])->name('bookings.store');
+Route::post('/book', [BookingController::class, 'store'])->name('booking.store');
+Route::post('/appointments', [BookingController::class, 'store'])->name('appointments.store');
+
+// Contact alias
+Route::post('/contact/submit', [PageController::class, 'submitContact'])->name('contact.submit');
+
+// Commerce & Checkout
+Route::get('/cart', [CommerceController::class, 'showCart'])->name('cart.show');
+Route::post('/cart/items', [CommerceController::class, 'addToCart'])->name('cart.add');
+Route::patch('/cart/items/{id}', [CommerceController::class, 'updateCartItem'])->name('cart.update');
+Route::delete('/cart/items/{id}', [CommerceController::class, 'removeCartItem'])->name('cart.remove');
+Route::get('/checkout', [CommerceController::class, 'checkout'])->name('checkout.show');
+Route::post('/checkout', [CommerceController::class, 'processCheckout'])->name('checkout.process');
+Route::get('/orders/{number}/track', [CommerceController::class, 'trackOrder'])->name('orders.track');
+Route::get('/orders/{number}/bank-transfer', [CommerceController::class, 'bankTransfer'])->name('orders.bank_transfer');
+Route::post('/orders/{number}/proof', [CommerceController::class, 'uploadProof'])->name('orders.upload_proof');
+Route::post('/orders/{number}/bank-transfer/upload', [CommerceController::class, 'uploadProof'])->name('orders.bank_transfer.upload');
+
+// Sitemaps & robots
+Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
+
+// Public Invoice Routes
+Route::get('/i/{token}', [InvoicePublicController::class, 'show'])->name('invoices.public');
+Route::get('/i/{token}/pdf', [InvoicePublicController::class, 'downloadPdf'])->name('invoices.public.pdf');
+
+// Auth Routes
+Route::get('/login', [AuthController::class, 'showLinkRequestForm'])->name('login')->middleware('guest');
+Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+// Dashboard & Staff Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
+    // ── Invoice Module Routes ───────────────────────────────────────────────
+    Route::get('/invoice-items/suggest', [InvoiceItemSuggestionController::class, 'suggest'])->name('invoices.items.suggest');
+    Route::post('/invoices/preview', [InvoicePreviewController::class, 'live'])->name('invoices.preview.live');
+
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+    Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
+    Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
+    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
+    Route::get('/invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
+    Route::put('/invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update');
+    Route::post('/invoices/{invoice}/issue', [InvoiceController::class, 'issue'])->name('invoices.issue');
+    Route::post('/invoices/{invoice}/void', [InvoiceController::class, 'void'])->name('invoices.void');
+    Route::post('/invoices/{invoice}/duplicate', [InvoiceController::class, 'duplicate'])->name('invoices.duplicate');
+    Route::post('/invoices/{invoice}/payments', [InvoiceController::class, 'recordPayment'])->name('invoices.payments.store');
+    Route::get('/invoices/{invoice}/download', [InvoicePdfController::class, 'download'])->name('invoices.pdf.download');
+    Route::get('/invoices/{invoice}/stream', [InvoicePdfController::class, 'stream'])->name('invoices.pdf.stream');
+    Route::get('/invoices/{invoice}/preview', [InvoicePreviewController::class, 'show'])->name('invoices.preview.show');
+
+    // Customers
+    Route::get('/invoices-customers', [CustomerController::class, 'index'])->name('invoices.customers.index');
+    Route::get('/invoices-customers/search', [CustomerController::class, 'search'])->name('invoices.customers.search');
+    Route::post('/invoices-customers', [CustomerController::class, 'store'])->name('invoices.customers.store');
+    Route::put('/invoices-customers/{customer}', [CustomerController::class, 'update'])->name('invoices.customers.update');
+    Route::delete('/invoices-customers/{customer}', [CustomerController::class, 'destroy'])->name('invoices.customers.destroy');
+
+    // Item Catalog
+    Route::get('/invoices-catalog', [CatalogController::class, 'index'])->name('invoices.catalog.index');
+    Route::post('/invoices-catalog', [CatalogController::class, 'store'])->name('invoices.catalog.store');
+    Route::put('/invoices-catalog/{item}', [CatalogController::class, 'update'])->name('invoices.catalog.update');
+    Route::delete('/invoices-catalog/{item}', [CatalogController::class, 'destroy'])->name('invoices.catalog.destroy');
+
+    // Invoice Settings
+    Route::get('/invoices-settings/templates', [TemplateController::class, 'index'])->name('invoices.settings.templates');
+    Route::put('/invoices-settings/templates/{template}', [TemplateController::class, 'update'])->name('invoices.settings.templates.update');
+    Route::get('/invoices-settings/business', [BusinessProfileController::class, 'edit'])->name('invoices.settings.business');
+    Route::put('/invoices-settings/business', [BusinessProfileController::class, 'update'])->name('invoices.settings.business.update');
+    Route::post('/invoices-settings/bank-accounts', [BusinessProfileController::class, 'storeBankAccount'])->name('invoices.settings.bank-accounts.store');
+    Route::put('/invoices-settings/bank-accounts/{account}', [BusinessProfileController::class, 'updateBankAccount'])->name('invoices.settings.bank-accounts.update');
+    Route::delete('/invoices-settings/bank-accounts/{account}', [BusinessProfileController::class, 'destroyBankAccount'])->name('invoices.settings.bank-accounts.destroy');
+
+    // ── Image Upload ─────────────────────────────────────────────────────────
+    Route::post('/admin/upload-image', [ImageUploadController::class, 'store'])->name('admin.upload-image');
+    Route::post('/admin/upload-media', [ImageUploadController::class, 'uploadMedia'])->name('admin.upload-media');
+
+    // ── Admin Blog ───────────────────────────────────────────────────────────
+    Route::get('/admin/blog', [BlogController::class, 'index'])->name('admin.blog.index');
+    Route::get('/admin/blog/create', [BlogController::class, 'create'])->name('admin.blog.create');
+    Route::post('/admin/blog', [BlogController::class, 'store'])->name('admin.blog.store');
+    Route::get('/admin/blog/{blog}/edit', [BlogController::class, 'edit'])->name('admin.blog.edit');
+    Route::put('/admin/blog/{blog}', [BlogController::class, 'update'])->name('admin.blog.update');
+    Route::delete('/admin/blog/{blog}', [BlogController::class, 'destroy'])->name('admin.blog.destroy');
+
+    // ── Admin Testimonials ───────────────────────────────────────────────────
+    Route::get('/admin/testimonials', [TestimonyController::class, 'index'])->name('admin.testimonials.index');
+    Route::patch('/admin/testimonials/{testimony}/approve', [TestimonyController::class, 'approve'])->name('admin.testimonials.approve');
+    Route::patch('/admin/testimonials/{testimony}/reject', [TestimonyController::class, 'reject'])->name('admin.testimonials.reject');
+    Route::delete('/admin/testimonials/{testimony}', [TestimonyController::class, 'destroy'])->name('admin.testimonials.destroy');
+
+    // ── Admin Partners ───────────────────────────────────────────────────────
+    Route::get('/admin/partners', [\App\Http\Controllers\PartnerController::class, 'index'])->name('admin.partners.index');
+    Route::get('/admin/partners/create', [\App\Http\Controllers\PartnerController::class, 'create'])->name('admin.partners.create');
+    Route::post('/admin/partners', [\App\Http\Controllers\PartnerController::class, 'store'])->name('admin.partners.store');
+    Route::get('/admin/partners/{partner}/edit', [\App\Http\Controllers\PartnerController::class, 'edit'])->name('admin.partners.edit');
+    Route::put('/admin/partners/{partner}', [\App\Http\Controllers\PartnerController::class, 'update'])->name('admin.partners.update');
+    Route::delete('/admin/partners/{partner}', [\App\Http\Controllers\PartnerController::class, 'destroy'])->name('admin.partners.destroy');
+
+    // ── Admin Settings ───────────────────────────────────────────────────────
+    Route::get('/admin/settings', [SettingController::class, 'index'])->name('admin.settings.index');
+    Route::post('/admin/settings', [SettingController::class, 'update'])->name('admin.settings.update');
+
+    // ── Admin Profile ────────────────────────────────────────────────────────
+    Route::get('/admin/profile', [ProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::put('/admin/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
+
+    // ── Admin Projects & Installations ──────────────────────────────────────
+    Route::get('/admin/projects', [AdminProjectController::class, 'index'])->name('admin.projects.index');
+    Route::get('/admin/projects/create', [AdminProjectController::class, 'create'])->name('admin.projects.create');
+    Route::post('/admin/projects', [AdminProjectController::class, 'store'])->name('admin.projects.store');
+    Route::get('/admin/projects/{project}/edit', [AdminProjectController::class, 'edit'])->name('admin.projects.edit');
+    Route::put('/admin/projects/{project}', [AdminProjectController::class, 'update'])->name('admin.projects.update');
+    Route::delete('/admin/projects/{project}', [AdminProjectController::class, 'destroy'])->name('admin.projects.destroy');
+
+    // ── Admin Products & Pricing ──────────────────────────────────────────────
+    Route::get('/admin/products', [AdminProductController::class, 'index'])->name('admin.products.index');
+    Route::get('/admin/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');
+    Route::post('/admin/products', [AdminProductController::class, 'store'])->name('admin.products.store');
+    Route::get('/admin/products/{product}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/admin/products/{product}', [AdminProductController::class, 'update'])->name('admin.products.update');
+    Route::patch('/admin/products/{product}/quick-update', [AdminProductController::class, 'quickUpdate'])->name('admin.products.quick-update');
+    Route::delete('/admin/products/{product}', [AdminProductController::class, 'destroy'])->name('admin.products.destroy');
+
+    // ── Admin Maintenance Plans & Pricing ─────────────────────────────────────
+    Route::get('/admin/maintenance-plans', [AdminPlanController::class, 'index'])->name('admin.plans.index');
+    Route::get('/admin/maintenance-plans/create', [AdminPlanController::class, 'create'])->name('admin.plans.create');
+    Route::post('/admin/maintenance-plans', [AdminPlanController::class, 'store'])->name('admin.plans.store');
+    Route::get('/admin/maintenance-plans/{plan}/edit', [AdminPlanController::class, 'edit'])->name('admin.plans.edit');
+    Route::put('/admin/maintenance-plans/{plan}', [AdminPlanController::class, 'update'])->name('admin.plans.update');
+    Route::delete('/admin/maintenance-plans/{plan}', [AdminPlanController::class, 'destroy'])->name('admin.plans.destroy');
+
+    // ── Admin Regional Delivery & Install Fees ────────────────────────────────
+    Route::get('/admin/delivery-fees', [AdminStateFeeController::class, 'index'])->name('admin.state-fees.index');
+    Route::patch('/admin/delivery-fees/{state}', [AdminStateFeeController::class, 'update'])->name('admin.state-fees.update');
+    Route::post('/admin/delivery-fees/bulk', [AdminStateFeeController::class, 'bulkUpdate'])->name('admin.state-fees.bulk');
+});
+
