@@ -8,6 +8,7 @@ const page = usePage();
 const site = computed(() => ({
     name: page.props.site?.name || company.name,
     rc_number: page.props.site?.rc_number || company.rcNumber,
+    logo_url: page.props.site?.logo_url || '/images/logo.svg',
     phone: page.props.site?.phone || company.primaryPhone,
     secondary_phone: page.props.site?.secondary_phone || company.secondaryPhone,
     email: page.props.site?.email || company.email,
@@ -37,7 +38,7 @@ const scrollToTop = () => {
                 <div class="lg:col-span-4 space-y-5">
                     <Link href="/" class="flex items-center space-x-3 group">
                         <img 
-                            :src="'/images/logo.svg'" 
+                            :src="site.logo_url" 
                             alt="KUIT LIMITED Logo" 
                             class="w-11 h-11 object-contain rounded-xl shadow-md group-hover:scale-105 transition-transform duration-300 shrink-0"
                         />
@@ -112,6 +113,9 @@ const scrollToTop = () => {
                         </li>
                         <li>
                             <Link href="/projects" class="text-slate-300 hover:text-amber-400 transition">Projects Gallery</Link>
+                        </li>
+                        <li>
+                            <Link href="/blog" class="text-slate-300 hover:text-amber-400 transition">Blog</Link>
                         </li>
                         <li>
                             <Link href="/contact" class="text-slate-300 hover:text-amber-400 transition">Contact Us</Link>

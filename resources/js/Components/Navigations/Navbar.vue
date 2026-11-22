@@ -49,6 +49,7 @@ onUnmounted(() => {
 const site = computed(() => ({
     name: page.props.site?.name || company.name,
     rc_number: page.props.site?.rc_number || company.rcNumber,
+    logo_url: page.props.site?.logo_url || '/images/logo.svg',
     phone: page.props.site?.phone || company.primaryPhone,
     secondary_phone: page.props.site?.secondary_phone || company.secondaryPhone,
     email: page.props.site?.email || company.email,
@@ -138,7 +139,7 @@ const navServices = servicePillars.map(p => ({
                 <!-- Brand Logo & Entity Title -->
                 <Link href="/" class="flex items-center space-x-3 group shrink-0">
                     <img 
-                        :src="'/images/logo.svg'" 
+                        :src="site.logo_url" 
                         alt="KUIT LIMITED Logo" 
                         class="w-11 h-11 object-contain rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-300 shrink-0"
                     />
@@ -241,6 +242,13 @@ const navServices = servicePillars.map(p => ({
                     </Link>
 
                     <Link 
+                        href="/blog" 
+                        class="px-3 py-2 rounded-xl hover:text-[#020B4F] hover:bg-slate-100 transition-colors whitespace-nowrap"
+                    >
+                        Blog
+                    </Link>
+
+                    <Link 
                         href="/contact" 
                         class="px-3 py-2 rounded-xl hover:text-[#020B4F] hover:bg-slate-100 transition-colors whitespace-nowrap"
                     >
@@ -317,7 +325,7 @@ const navServices = servicePillars.map(p => ({
                     <!-- Drawer Header -->
                     <div class="flex items-center justify-between pb-4 border-b border-slate-100">
                         <div class="flex items-center space-x-2.5">
-                            <img :src="'/images/logo.svg'" alt="KUIT LIMITED" class="w-9 h-9 object-contain" />
+                            <img :src="site.logo_url" alt="KUIT LIMITED" class="w-9 h-9 object-contain shrink-0" />
                             <div>
                                 <span class="text-lg font-black text-[#020B4F]">KUIT <span class="text-[#F5A800]">LIMITED</span></span>
                                 <p class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">{{ site.rc_number }}</p>
@@ -392,6 +400,14 @@ const navServices = servicePillars.map(p => ({
                             class="block px-3 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-slate-50 hover:text-[#020B4F]"
                         >
                             Projects Gallery
+                        </Link>
+
+                        <Link 
+                            href="/blog" 
+                            @click="closeMenu" 
+                            class="block px-3 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-slate-50 hover:text-[#020B4F]"
+                        >
+                            Blog
                         </Link>
 
                         <Link 

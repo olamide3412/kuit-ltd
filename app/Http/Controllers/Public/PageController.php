@@ -111,8 +111,8 @@ class PageController extends Controller
         $faqs = Faq::published()->orderBy('sort_order')->get();
 
         $seo = new SeoData(
-            title: 'Frequently Asked Questions (Solar, Starlink & DSTV)',
-            description: 'Got questions about solar system runtimes, Starlink speeds, or DSTV signal errors? Find answers to commonly asked questions.',
+            title: 'Frequently Asked Questions | KUIT LIMITED',
+            description: 'Answers to frequently asked questions about equipment leasing terms, dry vs wet lease, marine vessel charters, civil works, and oilfield services.',
             breadcrumbs: [
                 'Home' => url('/'),
                 'FAQs' => url('/faq'),

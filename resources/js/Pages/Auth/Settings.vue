@@ -28,6 +28,7 @@ const form = useForm({
     about_founder_bio: props.settings?.about_founder_bio ?? '',
     about_founder_image: props.settings?.about_founder_image ?? '',
     site_logo_url: props.settings?.site_logo_url ?? '',
+    blog_banner_url: props.settings?.blog_banner_url ?? '',
 })
 
 const addSlide = () => {
@@ -548,6 +549,29 @@ const saveSettings = () => {
                                     <img :src="slide.value" alt="Preview" class="w-full h-full object-cover bg-gray-100" @error="(e) => e.target.style.display = 'none'" />
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blog Page Banner Photo Section -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
+                        <h3 class="font-bold text-gray-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                            </svg>
+                            Blog Page Header Banner Photo
+                        </h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <p class="text-sm text-gray-500">
+                            Upload a dedicated header background banner displayed at the top of the public Blog &amp; Insights page (/blog). If left empty, it will fall back to the first homepage hero slide.
+                        </p>
+                        <div class="max-w-xl">
+                            <ImageUpload 
+                                v-model="form.blog_banner_url" 
+                                label="Upload Blog Banner Photo (WebP, JPG, or PNG)" 
+                            />
                         </div>
                     </div>
                 </div>

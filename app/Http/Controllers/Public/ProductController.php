@@ -43,8 +43,8 @@ class ProductController extends Controller
         $products = $query->paginate(12)->withQueryString();
 
         $seo = new SeoData(
-            title: 'Solar Packages, Starlink Kits & DSTV Deals',
-            description: 'Browse all-in-one solar packages, genuine Starlink satellite hardware, and DSTV decoders with turnkey installation in Nigeria.',
+            title: 'Equipment & Fleet Leasing Packages | KUIT LIMITED',
+            description: 'Browse certified heavy equipment leasing packages, marine vessel charters, and industrial plant hire across Nigeria.',
             breadcrumbs: [
                 'Home' => url('/'),
                 'Packages' => url('/packages'),

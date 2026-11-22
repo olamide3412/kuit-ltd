@@ -8,14 +8,15 @@ import {
   faBookOpen, faFileAlt, faBook, faEdit, faComment, faGlobe, faComments, faTruck, faLeaf,
   faHandHoldingUsd, faShoppingBasket, faCreditCard, faBox, faLaptop, faBatteryFull, faHouse,
   // Sector icons
-  faSolarPanel, faSatelliteDish, faTv, faWrench, faCheck, faCircleCheck, faCircleInfo,
+  faSatelliteDish, faTv, faWrench, faCheck, faCircleCheck, faCircleInfo,
   faCircleQuestion, faShieldHalved, faShoppingCart, faFileInvoiceDollar, faCalendarCheck,
   faLocationDot, faTrash, faPlus, faMinus, faLock, faFilter, faMagnifyingGlass,
   faChevronUp, faChevronDown, faChevronRight, faChevronLeft, faReceipt, faBuildingColumns,
   faCloudArrowUp, faSpinner, faPlay, faStar, faCopy, faBars, faArrowRight, faArrowLeft,
   faBatteryThreeQuarters, faFireFlameCurved, faSun, faNetworkWired, faVideo, faCalculator,
   faLightbulb, faFan, faTemperatureLow, faPlug, faTrashCan, faFaucetDrip,
-  faDownload, faFilePdf, faFileArrowDown
+  faDownload, faFilePdf, faFileArrowDown,
+  faShip, faTruckMonster, faCogs, faGears, faOilWell, faLaptopCode, faFileSignature, faPaperPlane, faArrowUp
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -31,14 +32,15 @@ library.add(
   faComment, faGlobe, faComments, faTruck, faLeaf, faHandHoldingUsd, faShoppingBasket,
   faCreditCard, faBox, faLaptop, faBatteryFull, faHouse, faTiktok, faYoutube, faLinkedin,
   // Sector & Operational icons
-  faSolarPanel, faSatelliteDish, faTv, faWrench, faCheck, faCircleCheck, faCircleInfo,
+  faSatelliteDish, faTv, faWrench, faCheck, faCircleCheck, faCircleInfo,
   faCircleQuestion, faShieldHalved, faShoppingCart, faFileInvoiceDollar, faCalendarCheck,
   faLocationDot, faTrash, faPlus, faMinus, faLock, faFilter, faMagnifyingGlass,
   faChevronUp, faChevronDown, faChevronRight, faChevronLeft, faReceipt, faBuildingColumns,
   faCloudArrowUp, faSpinner, faPlay, faStar, faCopy, faBars, faArrowRight, faArrowLeft,
   faBatteryThreeQuarters, faFireFlameCurved, faSun, faNetworkWired, faVideo, faCalculator,
   faLightbulb, faFan, faTemperatureLow, faPlug, faTrashCan, faFaucetDrip,
-  faDownload, faFilePdf, faFileArrowDown
+  faDownload, faFilePdf, faFileArrowDown,
+  faShip, faTruckMonster, faCogs, faGears, faOilWell, faLaptopCode, faFileSignature, faPaperPlane, faArrowUp
 );
 
 export { FontAwesomeIcon };

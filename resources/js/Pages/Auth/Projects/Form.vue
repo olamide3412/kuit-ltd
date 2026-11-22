@@ -57,7 +57,7 @@ const submit = () => {
                     {{ isEditing ? 'Edit Completed Project' : 'Add New Completed Project' }}
                 </h1>
                 <p class="text-xs sm:text-sm text-gray-500 mt-0.5">
-                    Document client installations, solar array sizes, proof photos, and YouTube walkthrough videos.
+                    Document client deployments, heavy plant mobilization, marine operations, and project photos.
                 </p>
             </div>
             <a 
@@ -94,7 +94,7 @@ const submit = () => {
                         v-model="form.title"
                         type="text"
                         required
-                        placeholder="e.g. 5kVA 48V Hybrid Solar Installation for 5-Bedroom Duplex"
+                        placeholder="e.g. CAT 330 Excavator & Swamp Buggy Mobilisation for Forcados Pipeline Right-of-Way"
                         class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm bg-white text-slate-900 focus:ring-2 focus:ring-primary/50"
                         :class="{ 'border-red-500': form.errors.title }"
                     />
@@ -111,7 +111,7 @@ const submit = () => {
                             v-model="form.service_id"
                             class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm bg-white text-slate-900 focus:ring-2 focus:ring-primary/50"
                         >
-                            <option value="">Select Service (e.g. Solar, Starlink)</option>
+                            <option value="">Select Service (e.g. Marine Vessel Charter, Equipment Leasing)</option>
                             <option v-for="srv in services" :key="srv.id" :value="srv.id">{{ srv.name }}</option>
                         </select>
                     </div>
@@ -123,7 +123,7 @@ const submit = () => {
                         <input 
                             v-model="form.system_size"
                             type="text"
-                            placeholder="e.g. 5kVA Inverter / 5.12kWh Lithium / 3.3kW Solar"
+                            placeholder="e.g. CAT 330 Excavator + Low-bed Haulage / 400A Welding Rig"
                             class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm bg-white text-slate-900 focus:ring-2 focus:ring-primary/50"
                         />
                     </div>
@@ -200,7 +200,7 @@ const submit = () => {
                                 Project Gallery & Video Clips (Max 10)
                             </label>
                             <p class="text-xs text-gray-500 mt-0.5">
-                                Upload up to 10 proof photos (battery racks, roof solar mounts, cable trunking) or MP4/WebM clips.
+                                Upload up to 10 proof photos (site clearing, pipe fabrication, marine vessel operations) or MP4 clips.
                             </p>
                         </div>
                         <span class="text-xs font-mono font-bold text-slate-500 bg-white border border-gray-200 px-2 py-0.5 rounded">
@@ -246,7 +246,7 @@ const submit = () => {
                     <textarea 
                         v-model="form.summary"
                         rows="2"
-                        placeholder="Replaced daily 12-hour generator runs with a silent 5kVA Deye inverter and lithium battery bank."
+                        placeholder="Mobilised CAT 330 excavator and low-bed trailer for site clearing and swamp trenching across the Niger Delta corridor."
                         class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm bg-white text-slate-900 focus:ring-2 focus:ring-primary/50"
                     ></textarea>
                 </div>

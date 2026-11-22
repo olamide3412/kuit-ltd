@@ -1,12 +1,22 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 
 const props = defineProps({
     post: Object,
     related: Array,
 });
 
+const page = usePage();
+const siteLogo = computed(() => page.props.site?.logo_url || 'https://kuitltd.com/images/logo.svg');
+
 const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+
+const handleImageError = (e) => {
+    if (!e?.target || e.target.dataset.fallbackApplied === 'true') return;
+    e.target.dataset.fallbackApplied = 'true';
+    e.target.src = '/images/og-default.jpg';
+};
 </script>
 
 <template>
@@ -31,7 +41,7 @@ const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-GB', { day: 'nu
                     '@type': 'BlogPosting',
                     'headline': post.title,
                     'description': post.excerpt || post.title,
-                    'image': post.cover_image || 'https://kuitltd.com/images/logo.svg',
+                    'image': post.cover_image || siteLogo,
                     'datePublished': post.published_at,
                     'author': {
                         '@type': 'Person',
@@ -42,7 +52,7 @@ const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-GB', { day: 'nu
                         'name': 'KUIT LIMITED',
                         'logo': {
                             '@type': 'ImageObject',
-                            'url': 'https://kuitltd.com/images/logo.svg'
+                            'url': siteLogo
                         }
                     }
                 })"
@@ -88,7 +98,7 @@ const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-GB', { day: 'nu
                 :src="post.cover_image" 
                 :alt="post.title" 
                 class="w-full h-72 md:h-[450px] object-cover rounded-2xl shadow-md"
-                @error="(e) => { e.target.src = 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=1200&auto=format&fit=crop' }"
+                @error="handleImageError"
             />
         </div>
 
@@ -120,7 +130,7 @@ const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-GB', { day: 'nu
                                 :src="r.cover_image" 
                                 :alt="r.title" 
                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                @error="(e) => { e.target.src = 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=1200&auto=format&fit=crop' }" 
+                                @error="handleImageError" 
                             />
                         </div>
                         <div class="p-4">

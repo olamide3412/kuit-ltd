@@ -21,11 +21,11 @@ class BookingController extends Controller
         $states = State::where('is_active', true)->orderBy('name')->get(['id', 'name', 'code']);
 
         $seo = new SeoData(
-            title: 'Book an Installation or Site Survey',
-            description: 'Schedule a certified technician to visit your home or office for solar survey, Starlink installation, or DSTV setup.',
+            title: 'Book a Technical Inspection or Site Survey',
+            description: 'Schedule a certified KUIT LIMITED technical team to visit your site for plant inspection, marine survey, or pipeline right-of-way assessment.',
             breadcrumbs: [
                 'Home' => url('/'),
-                'Book Installation' => url('/book-installation'),
+                'Book Inspection' => url('/book-installation'),
             ]
         );
 
@@ -72,11 +72,11 @@ class BookingController extends Controller
         ]);
 
         $serviceLabels = [
-            'solar_installation' => 'Solar & Inverter Installation',
-            'solar_maintenance' => 'Solar Cleaning & Maintenance',
-            'starlink_installation' => 'Starlink Rooftop Mast Setup',
-            'dstv_installation' => 'DSTV Installation & Extra View',
-            'dish_realignment' => 'DSTV Dish Realignment',
+            'equipment_inspection' => 'Equipment Site Assessment & Mobilisation Survey',
+            'marine_survey' => 'Marine Vessel & Quayside Inspection',
+            'pipeline_survey' => 'Pipeline Route & Right-of-Way Survey',
+            'preventive_maintenance' => 'Plant & Heavy Equipment Maintenance',
+            'e_and_i_calibration' => 'Robertshaw Panel & E&I Calibration',
         ];
         $serviceTitle = $serviceLabels[$booking->service_type] ?? Str::headline($booking->service_type);
         $dateFormatted = $booking->preferred_date ? $booking->preferred_date->format('d M, Y') : $validated['preferred_date'];

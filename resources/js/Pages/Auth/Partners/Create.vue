@@ -103,7 +103,7 @@ const submit = () => {
                     <textarea 
                         v-model="form.description"
                         rows="3"
-                        placeholder="e.g. Tier-1 LiFePO4 Lithium Battery Storage & Robust Hybrid Inverters..."
+                        placeholder="e.g. Upstream exploration, wellhead instrumentation, and marine logistics support..."
                         class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm bg-white text-slate-900 focus:ring-2 focus:ring-primary/50"
                         :class="{ 'border-red-500': form.errors.description }"
                     ></textarea>

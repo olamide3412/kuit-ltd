@@ -42,7 +42,6 @@ class SitemapController extends Controller
                       "Disallow: /cart\n" .
                       "Disallow: /checkout\n" .
                       "Disallow: /account\n" .
-                      "Disallow: /solar-calculator/r/\n" .
                       "Disallow: /orders/*/bank-transfer\n" .
                       "Disallow: /*?*sort=\n" .
                       "Disallow: /*?*search=\n" .

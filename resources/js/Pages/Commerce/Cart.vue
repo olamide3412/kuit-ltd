@@ -44,7 +44,7 @@ const removeItem = (item) => {
                 </div>
                 <h2 class="text-xl font-bold text-slate-800">Your cart is currently empty</h2>
                 <p class="text-xs text-slate-500 leading-relaxed">
-                    Explore our engineered solar packages, genuine Starlink kits, and DSTV decoder bundles.
+                    Explore our heavy equipment leasing packages, marine vessel charter, and industrial engineering solutions.
                 </p>
                 <Link 
                     href="/packages"

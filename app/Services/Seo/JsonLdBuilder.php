@@ -4,6 +4,15 @@ namespace App\Services\Seo;
 
 class JsonLdBuilder
 {
+    public static function getLogoUrl(): string
+    {
+        $siteLogo = \App\Models\Setting::get('site_logo_url');
+        if (!empty($siteLogo)) {
+            return str_starts_with($siteLogo, 'http') ? $siteLogo : url($siteLogo);
+        }
+        return url('/images/logo.svg');
+    }
+
     public static function organization(): array
     {
         return [
@@ -14,7 +23,7 @@ class JsonLdBuilder
             'alternateName' => 'KUIT',
             'identifier' => 'RC 806865',
             'url' => url('/'),
-            'logo' => url('/images/logo.svg'),
+            'logo' => self::getLogoUrl(),
             'email' => 'info@kuitltd.com',
             'contactPoint' => [
                 '@type' => 'ContactPoint',
@@ -34,7 +43,7 @@ class JsonLdBuilder
             '@id' => url('/') . '#localbusiness',
             'name' => 'KUIT LIMITED',
             'identifier' => 'RC 806865',
-            'image' => url('/images/logo.svg'),
+            'image' => self::getLogoUrl(),
             'telephone' => '(+234) 803 280 2038',
             'email' => 'info@kuitltd.com',
             'priceRange' => '₦₦₦₦',

@@ -32,8 +32,8 @@ class ProjectController extends Controller
         $projects = $query->latest('completed_on')->paginate(9)->withQueryString();
 
         $seo = new SeoData(
-            title: 'Our Completed Projects & Video Proof',
-            description: 'Watch video walkthroughs and view real photos of our completed solar installations, Starlink setups, and DSTV deployments across Nigeria.',
+            title: 'Our Completed Projects & Field Operations',
+            description: 'Explore verified project photos and operational records of our marine support, civil infrastructure, equipment mobilisations, and oilfield engineering works across Nigeria.',
             breadcrumbs: [
                 'Home' => url('/'),
                 'Projects' => url('/projects'),

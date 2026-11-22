@@ -32,11 +32,10 @@ const form = useForm({
     is_published: props.product?.is_published !== undefined ? props.product.is_published : true,
     is_featured: props.product?.is_featured || false,
     specs: {
-        capacity_kva: props.product?.specs?.capacity_kva || '',
-        battery_kwh: props.product?.specs?.battery_kwh || '',
-        panels_w: props.product?.specs?.panels_w || '',
-        inverter_type: props.product?.specs?.inverter_type || 'Pure Sine Wave Hybrid',
-        battery_type: props.product?.specs?.battery_type || 'Lithium LiFePO4',
+        tonnage: props.product?.specs?.tonnage || '',
+        power_rating: props.product?.specs?.power_rating || '',
+        capacity: props.product?.specs?.capacity || '',
+        lease_type: props.product?.specs?.lease_type || 'Dry or Wet Lease',
     },
 });
 
@@ -174,57 +173,52 @@ const submit = () => {
                 </div>
             </div>
 
-            <!-- 3. Solar Calculator Matching Specs -->
+            <!-- 3. Technical & Equipment Specifications -->
             <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-                    <h2 class="text-base font-bold text-slate-900">Engineering Specs & Sizing Matching</h2>
-                    <span class="text-xs text-slate-500">Used by Solar Calculator matcher</span>
+                    <h2 class="text-base font-bold text-slate-900">Technical & Equipment Specifications</h2>
+                    <span class="text-xs text-slate-500">Fleet & plant sizing</span>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Inverter Capacity (kVA)</label>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Operating Weight / Class (Tons)</label>
                         <input 
-                            v-model="form.specs.capacity_kva" 
-                            type="number" 
-                            step="0.1" 
-                            @wheel="$event.target.blur()"
-                            placeholder="e.g. 3.5" 
-                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 outline-hidden no-spinners [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                            v-model="form.specs.tonnage" 
+                            type="text" 
+                            placeholder="e.g. 30 Tons / Heavy Duty" 
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 outline-hidden" 
                         />
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Battery Storage (kWh)</label>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Engine / Power Rating</label>
                         <input 
-                            v-model="form.specs.battery_kwh" 
-                            type="number" 
-                            step="0.1" 
-                            @wheel="$event.target.blur()"
-                            placeholder="e.g. 5.12" 
-                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 outline-hidden no-spinners [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                            v-model="form.specs.power_rating" 
+                            type="text" 
+                            placeholder="e.g. 275 HP Diesel / 400A" 
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 outline-hidden" 
                         />
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Solar Panels Total (Watts)</label>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Bucket / Payload Capacity</label>
                         <input 
-                            v-model="form.specs.panels_w" 
-                            type="number" 
-                            @wheel="$event.target.blur()"
-                            placeholder="e.g. 2200" 
-                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 outline-hidden no-spinners [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                            v-model="form.specs.capacity" 
+                            type="text" 
+                            placeholder="e.g. 1.8 m³ / 60 Tons" 
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 outline-hidden" 
                         />
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                     <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Warranty Coverage</label>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">SLA & Maintenance Warranty</label>
                         <input 
                             v-model="form.warranty_text" 
                             type="text" 
-                            placeholder="e.g. 5 Years Battery / 2 Years Inverter" 
+                            placeholder="e.g. Full Preventive Maintenance SLA / QSP Certified Operator" 
                             class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 outline-hidden" 
                         />
                     </div>
@@ -289,7 +283,7 @@ const submit = () => {
                             <input 
                                 v-model="form.image" 
                                 type="text" 
-                                placeholder="e.g. https://images.unsplash.com/... or /storage/packages/solar.jpg" 
+                                placeholder="e.g. https://images.unsplash.com/... or /images/equipment/cat330.jpg" 
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 outline-hidden" 
                             />
                             <button

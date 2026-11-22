@@ -51,6 +51,7 @@ class BlogController extends Controller
         }
 
         return Inertia::render('Blog/Index', [
+            'blogBanner'  => \App\Models\Setting::get('blog_banner_url', ''),
             'heroSlides'  => json_decode(\App\Models\Setting::get('hero_slides', '[]'), true) ?: [],
             'posts'       => $query->paginate($perPage),
             'filters'     => $request->only(['search', 'category', 'sort', 'date', 'view']),

@@ -231,7 +231,7 @@
                                 type="text"
                                 v-model="modalForm.category"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-                                placeholder="Inverters, Starlink..."
+                                placeholder="Heavy Plant, Marine Fleet, Civil Works..."
                             />
                         </div>
                         <div>
@@ -240,7 +240,7 @@
                                 type="text"
                                 v-model="modalForm.unit"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-                                placeholder="pcs, kit, roll, m"
+                                placeholder="day, month, trip, unit, lot"
                             />
                         </div>
                     </div>

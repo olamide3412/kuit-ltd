@@ -34,7 +34,7 @@ const form = useForm({
     city: '',
     preferred_date: minDate.value,
     preferred_slot: 'morning',
-    service_type: 'solar_installation',
+    service_type: 'equipment_inspection',
     notes: '',
 });
 
@@ -273,11 +273,11 @@ const submitBooking = () => {
                                     form.errors.service_type ? 'border-rose-400 bg-rose-50/30 focus:ring-rose-500' : 'border-slate-200 focus:ring-amber-500'
                                 ]"
                             >
-                                <option value="solar_installation">Solar & Inverter Installation</option>
-                                <option value="solar_maintenance">Solar Panel Cleaning & Maintenance</option>
-                                <option value="starlink_installation">Starlink Rooftop Mast Setup</option>
-                                <option value="dstv_installation">DSTV Installation & Extra View</option>
-                                <option value="dish_realignment">DSTV Dish Realignment (Fix Signal)</option>
+                                <option value="equipment_inspection">Equipment Site Assessment &amp; Mobilisation Survey</option>
+                                <option value="marine_survey">Marine Vessel &amp; Quayside Inspection</option>
+                                <option value="pipeline_survey">Pipeline Route &amp; Right-of-Way Survey</option>
+                                <option value="preventive_maintenance">Plant &amp; Heavy Equipment Maintenance</option>
+                                <option value="e_and_i_calibration">Robertshaw Panel &amp; E&amp;I Calibration</option>
                             </select>
                             <p v-if="form.errors.service_type" class="mt-1 text-xs text-rose-600 font-medium">{{ form.errors.service_type }}</p>
                         </div>

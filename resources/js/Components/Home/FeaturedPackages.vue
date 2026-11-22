@@ -73,7 +73,7 @@ const allItems = computed(() => {
                             :src="item.image" 
                             :alt="item.name" 
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            @error="(e) => e.target.src = '/images/logo.svg'"
+                            @error="(e) => e.target.src = $page.props.site?.logo_url || '/images/logo.svg'"
                         />
                         <span class="absolute top-3 left-3 bg-[#020B4F]/90 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
                             {{ item.category }}

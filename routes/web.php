@@ -18,7 +18,6 @@ use App\Http\Controllers\Public\SitemapController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\MaintenancePlanController as AdminPlanController;
-use App\Http\Controllers\Admin\StateFeeController as AdminStateFeeController;
 use App\Http\Controllers\Invoice\InvoiceController;
 use App\Http\Controllers\Invoice\InvoicePdfController;
 use App\Http\Controllers\Invoice\InvoicePreviewController;
@@ -212,9 +211,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/maintenance-plans/{plan}', [AdminPlanController::class, 'update'])->name('admin.plans.update');
     Route::delete('/admin/maintenance-plans/{plan}', [AdminPlanController::class, 'destroy'])->name('admin.plans.destroy');
 
-    // ── Admin Regional Delivery & Install Fees ────────────────────────────────
-    Route::get('/admin/delivery-fees', [AdminStateFeeController::class, 'index'])->name('admin.state-fees.index');
-    Route::patch('/admin/delivery-fees/{state}', [AdminStateFeeController::class, 'update'])->name('admin.state-fees.update');
-    Route::post('/admin/delivery-fees/bulk', [AdminStateFeeController::class, 'bulkUpdate'])->name('admin.state-fees.bulk');
+    // ── Legacy Delivery Fees (Redirect to Dashboard) ───────────────────────────
+    Route::get('/admin/delivery-fees', fn () => redirect()->route('dashboard'))->name('admin.state-fees.index');
 });
 

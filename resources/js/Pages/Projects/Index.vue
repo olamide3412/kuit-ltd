@@ -83,7 +83,7 @@ const closeLightbox = () => {
                             :src="project.image" 
                             :alt="project.title"
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            @error="(e) => e.target.src = '/images/logo.svg'"
+                            @error="(e) => e.target.src = $page.props.site?.logo_url || '/images/logo.svg'"
                         />
                         <div class="absolute inset-0 bg-[#020B4F]/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                             <span class="w-10 h-10 rounded-full bg-white/90 text-[#020B4F] flex items-center justify-center shadow-lg">
@@ -135,7 +135,7 @@ const closeLightbox = () => {
                             :src="activeModalImage.image" 
                             :alt="activeModalImage.title" 
                             class="max-h-[70vh] w-auto object-contain"
-                            @error="(e) => e.target.src = '/images/logo.svg'"
+                            @error="(e) => e.target.src = $page.props.site?.logo_url || '/images/logo.svg'"
                         />
                         <button 
                             @click="closeLightbox" 

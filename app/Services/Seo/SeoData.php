@@ -12,6 +12,7 @@ class SeoData
     public string $ogType;
     public array $jsonLd;
     public array $breadcrumbs;
+    public ?string $keywords;
 
     public function __construct(
         string $title = '',
@@ -21,7 +22,8 @@ class SeoData
         ?string $ogImage = null,
         string $ogType = 'website',
         array $jsonLd = [],
-        array $breadcrumbs = []
+        array $breadcrumbs = [],
+        ?string $keywords = null
     ) {
         $company = config('app.name', 'KUIT LIMITED');
         $this->title = $title ? "{$title} | {$company}" : "{$company} | Marine Logistics, Equipment Leasing & Engineering Nigeria";
@@ -32,6 +34,7 @@ class SeoData
         $this->ogType = $ogType;
         $this->jsonLd = $jsonLd;
         $this->breadcrumbs = $breadcrumbs;
+        $this->keywords = $keywords;
     }
 
     public function toArray(): array
@@ -45,6 +48,7 @@ class SeoData
             'ogType' => $this->ogType,
             'jsonLd' => $this->jsonLd,
             'breadcrumbs' => $this->breadcrumbs,
+            'keywords' => $this->keywords,
         ];
     }
 }

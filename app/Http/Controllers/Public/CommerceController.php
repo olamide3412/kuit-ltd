@@ -47,7 +47,7 @@ class CommerceController extends Controller
 
         $seo = new SeoData(
             title: 'Your Cart',
-            description: 'Review your selected solar systems, Starlink hardware, and DSTV kits.',
+            description: 'Review your selected equipment leasing and marine services packages.',
             robots: 'noindex,nofollow',
             breadcrumbs: [
                 'Home' => url('/'),

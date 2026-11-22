@@ -63,7 +63,9 @@ class HandleInertiaRequests extends Middleware
                 return [
                     'name' => \App\Models\Setting::get('company_name', 'KUIT LIMITED'),
                     'rc_number' => \App\Models\Setting::get('rc_number', 'RC 806865'),
-                    'logo_url' => \App\Models\Setting::get('site_logo_url') ?: asset('images/logo.png'),
+                    'logo_url' => ($rawLogo = \App\Models\Setting::get('site_logo_url')) 
+                        ? (str_starts_with($rawLogo, 'http') ? $rawLogo : url($rawLogo)) 
+                        : asset('images/logo.png'),
                     'tagline' => \App\Models\Setting::get('tagline', 'Marine | Construction | Engineering Services'),
                     'phone' => \App\Models\Setting::get('phone', '(+234) 803 280 2038'),
                     'secondary_phone' => \App\Models\Setting::get('secondary_phone', '(+234) 703 344 2821'),
@@ -79,6 +81,7 @@ class HandleInertiaRequests extends Middleware
                     'account_number' => $accountNumber,
                     'enable_profile_download' => filter_var(\App\Models\Setting::get('enable_company_profile_download', 'true'), FILTER_VALIDATE_BOOLEAN),
                     'company_profile_url' => \App\Models\Setting::get('company_profile_url', '/docs/kuit-limited-company-profile.pdf') ?: '/docs/kuit-limited-company-profile.pdf',
+                    'blog_banner_url' => \App\Models\Setting::get('blog_banner_url', ''),
                 ];
             },
             'support' => [

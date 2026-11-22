@@ -50,6 +50,7 @@ class SettingController extends Controller
                 'about_founder_bio'   => Setting::get('about_founder_bio', '<p>Incorporated on 16 March 2009 (RC 806865), KUIT LIMITED operates from Effurun-Warri with extensive field experience serving major energy clients including NNPC, NPDC, and CEPL.</p>'),
                 'about_founder_image' => Setting::get('about_founder_image', ''),
                 'site_logo_url'       => Setting::get('site_logo_url', ''),
+                'blog_banner_url'     => Setting::get('blog_banner_url', ''),
             ]
         ]);
     }
@@ -76,6 +77,7 @@ class SettingController extends Controller
             'about_founder_title'             => 'nullable|string|max:200',
             'about_founder_bio'               => 'nullable|string',
             'about_founder_image'             => 'nullable|string|max:500',
+            'blog_banner_url'                 => 'nullable|string|max:500',
         ]);
 
         Setting::set('enable_company_profile_download', $validated['enable_company_profile_download'] ? 'true' : 'false');
@@ -125,7 +127,8 @@ class SettingController extends Controller
         if (isset($validated['about_founder_name'])) Setting::set('about_founder_name', $validated['about_founder_name']);
         if (isset($validated['about_founder_title'])) Setting::set('about_founder_title', $validated['about_founder_title']);
         if (isset($validated['about_founder_bio'])) Setting::set('about_founder_bio', $validated['about_founder_bio']);
-        if (isset($validated['about_founder_image'])) Setting::set('about_founder_image', $validated['about_founder_image']);
+        if (array_key_exists('about_founder_image', $validated)) Setting::set('about_founder_image', $validated['about_founder_image']);
+        if (array_key_exists('blog_banner_url', $validated)) Setting::set('blog_banner_url', $validated['blog_banner_url'] ?? '');
 
         if (array_key_exists('site_logo_url', $validated)) {
             $logoUrl = $validated['site_logo_url'] ?? '';

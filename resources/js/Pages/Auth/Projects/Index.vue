@@ -45,7 +45,7 @@ const deleteProject = (project) => {
                     Completed Projects & Installations
                 </h1>
                 <p class="text-xs sm:text-sm text-gray-500 mt-1">
-                    Manage client case studies, proof of work, solar specs, and video walkthroughs featured on the public website.
+                    Manage client case studies, operational proof of work, plant specifications, and video walkthroughs featured on the public website.
                 </p>
             </div>
             <Link 
@@ -303,7 +303,7 @@ const deleteProject = (project) => {
 
             <!-- Pagination -->
             <div class="p-3 sm:p-4 border-t border-gray-100 flex justify-between items-center" v-if="projects.links">
-                <Pagination :links="projects.links" />
+                <Pagination :paginator="projects" :links="projects.links" />
             </div>
         </div>
 

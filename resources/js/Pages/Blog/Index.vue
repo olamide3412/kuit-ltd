@@ -6,6 +6,10 @@ import Layout from '@/Layouts/Layout.vue';
 defineOptions({ layout: Layout });
 
 const props = defineProps({
+    blogBanner: {
+        type: String,
+        default: ''
+    },
     heroSlides: {
         type: Array,
         default: () => []
@@ -20,10 +24,21 @@ const props = defineProps({
 
 const page = usePage();
 
-const defaultSolarImage = 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=2070&auto=format&fit=crop';
+const defaultBlogImage = '/images/og-default.jpg';
 
-// ─── Hero banner: dynamic hero slide or verified default ─────────────────────
+// ─── Hero banner: custom blog banner, dynamic hero slide, or default ─────────
 const heroBgImage = computed(() => {
+    if (props.blogBanner) {
+        return props.blogBanner.startsWith('http') || props.blogBanner.startsWith('/') 
+            ? props.blogBanner 
+            : `/storage/${props.blogBanner}`;
+    }
+    const sharedBanner = page.props.site?.blog_banner_url;
+    if (sharedBanner) {
+        return sharedBanner.startsWith('http') || sharedBanner.startsWith('/') 
+            ? sharedBanner 
+            : `/storage/${sharedBanner}`;
+    }
     if (props.heroSlides && props.heroSlides.length > 0 && props.heroSlides[0]?.value) {
         return props.heroSlides[0].value;
     }
@@ -31,7 +46,7 @@ const heroBgImage = computed(() => {
     if (slides && Array.isArray(slides) && slides.length > 0) {
         return slides[0]?.value || slides[0];
     }
-    return defaultSolarImage;
+    return defaultBlogImage;
 });
 
 const search         = ref(props.filters?.search   || '');
@@ -40,7 +55,7 @@ const dateFilter     = ref(props.filters?.date     || '');
 const activeCategory = ref(props.filters?.category || '');
 const currentView    = ref(props.filters?.view     || '');  // '' = hero_split, 'list' = full list
 
-const categories = ['Solar & Inverters', 'Starlink Broadband', 'DSTV & Satellite', 'Battery Storage', 'Field Guides'];
+const categories = ['Equipment Leasing', 'Marine Services', 'Civil Infrastructure', 'Oil & Gas Support', 'Enterprise IT'];
 
 const doSearch = () => {
     router.get(route('blog.index'), {
@@ -57,7 +72,13 @@ const setCategory = (cat) => {
     doSearch();
 };
 
-watch(search, (val) => { if (!val) doSearch(); });
+const handleImageError = (e) => {
+    if (!e?.target || e.target.dataset.fallbackApplied === 'true') {
+        return;
+    }
+    e.target.dataset.fallbackApplied = 'true';
+    e.target.src = defaultBlogImage;
+};
 
 // Timestamp: "Thursday, July 23, 2026 at 15:25"
 const formatFullTimestamp = (d) => {
@@ -73,11 +94,11 @@ const formatFullTimestamp = (d) => {
 };
 
 const getCoverImage = (post) => {
-    if (!post) return defaultSolarImage;
+    if (!post) return defaultBlogImage;
     if (post.cover_image && !post.cover_image.includes('photo-1509391365360') && !post.cover_image.includes('photo-1508873696983')) {
         return post.cover_image;
     }
-    return defaultSolarImage;
+    return defaultBlogImage;
 };
 
 // Share helpers
@@ -115,7 +136,7 @@ const sidePosts    = computed(() => props.posts?.data?.slice(1, 4) || []);
                 alt="Engineering Blog"
                 class="absolute inset-0 w-full h-full object-cover object-center"
                 loading="eager"
-                @error="(e) => { e.target.src = defaultSolarImage }"
+                @error="handleImageError"
             />
             <div class="absolute inset-0 bg-black/45"></div>
             <div class="relative z-10 h-full flex flex-col items-center justify-center text-white gap-3">
@@ -225,7 +246,7 @@ const sidePosts    = computed(() => props.posts?.data?.slice(1, 4) || []);
                                 :src="getCoverImage(featuredPost)"
                                 :alt="featuredPost.title"
                                 class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                @error="(e) => { e.target.src = defaultSolarImage }"
+                                @error="handleImageError"
                             />
                             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent"></div>
                             <div class="relative z-10 p-8 text-white text-center">
@@ -258,7 +279,7 @@ const sidePosts    = computed(() => props.posts?.data?.slice(1, 4) || []);
                                                 :src="getCoverImage(post)" 
                                                 :alt="post.title" 
                                                 class="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-300"
-                                                @error="(e) => { e.target.src = defaultSolarImage }" 
+                                                @error="handleImageError" 
                                             />
                                         </div>
                                         <!-- Text -->
@@ -303,7 +324,7 @@ const sidePosts    = computed(() => props.posts?.data?.slice(1, 4) || []);
                                 :src="getCoverImage(post)"
                                 :alt="post.title"
                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                @error="(e) => { e.target.src = defaultSolarImage }"
+                                @error="handleImageError"
                             />
                             <div v-else class="w-full h-full flex items-center justify-center">
                                 <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

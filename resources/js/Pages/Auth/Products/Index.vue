@@ -64,7 +64,7 @@ const formatNaira = (val) => {
         <div class="mb-6 flex items-center justify-between flex-wrap gap-4">
             <div>
                 <h1 class="text-2xl font-black text-slate-900">Products, Packages & Pricing</h1>
-                <p class="text-sm text-slate-500 mt-0.5">Configure live store packages, inverter systems, lithium batteries, and pricing.</p>
+                <p class="text-sm text-slate-500 mt-0.5">Configure live equipment units, marine charter packages, plant specifications, and rates.</p>
             </div>
             <Link 
                 :href="route('admin.products.create')" 

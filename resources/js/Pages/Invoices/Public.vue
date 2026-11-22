@@ -5,7 +5,7 @@
         <!-- Top bar with company branding & PDF button -->
         <div class="max-w-4xl w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 sm:pb-6 mb-4 sm:mb-6 border-b border-gray-200">
             <div class="flex items-center space-x-3">
-                <img :src="'/images/logo.svg'" alt="KUIT LIMITED" class="w-10 h-10 object-contain rounded-lg shrink-0" />
+                <img :src="$page.props.site?.logo_url || '/images/logo.svg'" alt="KUIT LIMITED" class="w-10 h-10 object-contain rounded-lg shrink-0" />
                 <div>
                     <h1 class="text-lg font-bold text-gray-900 leading-tight">KUIT LIMITED</h1>
                     <p class="text-xs text-gray-500">Invoice: {{ invoice.invoice_number || 'DRAFT' }}</p>
