@@ -43,7 +43,7 @@ class CommerceController extends Controller
         $cart = $this->getOrCreateCart($request);
         $cart->load(['items.product.category']);
 
-        $states = State::where('is_active', true)->orderBy('name')->get(['id', 'name', 'code', 'delivery_fee', 'install_fee']);
+        $states = State::where('is_active', true)->orderBy('name')->get(['id', 'name', 'code']);
 
         $seo = new SeoData(
             title: 'Your Cart',
@@ -177,8 +177,8 @@ class CommerceController extends Controller
             $subtotal += ($item->product->price * $item->qty);
         }
 
-        $deliveryFee = $validated['fulfilment_type'] === 'pickup' ? 0 : $state->delivery_fee;
-        $installFee = $validated['fulfilment_type'] === 'installation' ? $state->install_fee : 0;
+        $deliveryFee = 0;
+        $installFee = 0;
         $total = $subtotal + $deliveryFee + $installFee;
 
         $orderNumber = 'ZAY-' . date('Y') . '-' . strtoupper(Str::random(5));

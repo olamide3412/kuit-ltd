@@ -11,14 +11,10 @@ class State extends Model
         'name',
         'slug',
         'code',
-        'delivery_fee',
-        'install_fee',
         'is_active',
     ];
 
     protected $casts = [
-        'delivery_fee' => 'integer',
-        'install_fee' => 'integer',
         'is_active' => 'boolean',
     ];
 

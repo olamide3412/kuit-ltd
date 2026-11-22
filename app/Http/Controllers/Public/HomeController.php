@@ -55,10 +55,10 @@ class HomeController extends Controller
             ->whereIn('code', ['DE', 'LA', 'FC', 'RI', 'ED', 'OG']);
 
         if (\Illuminate\Support\Facades\DB::getDriverName() === 'sqlite') {
-            $keyStates = $stateQuery->orderBy('name')->get(['id', 'name', 'code', 'delivery_fee', 'install_fee']);
+            $keyStates = $stateQuery->orderBy('name')->get(['id', 'name', 'code']);
         } else {
             $keyStates = $stateQuery->orderByRaw("FIELD(code, 'DE', 'LA', 'FC', 'RI', 'ED', 'OG')")
-                ->get(['id', 'name', 'code', 'delivery_fee', 'install_fee']);
+                ->get(['id', 'name', 'code']);
         }
 
         $partners = Partner::where('status', 'active')
