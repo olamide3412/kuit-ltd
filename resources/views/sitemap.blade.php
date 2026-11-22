@@ -12,7 +12,7 @@
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>{{ url('/solar-calculator') }}</loc>
+        <loc>{{ url('/equipment') }}</loc>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>

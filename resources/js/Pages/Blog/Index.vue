@@ -25,28 +25,24 @@ const props = defineProps({
 const page = usePage();
 
 const defaultBlogImage = '/images/og-default.jpg';
+const bannerFailed = ref(false);
 
-// ─── Hero banner: custom blog banner, dynamic hero slide, or default ─────────
+// ─── Hero banner: custom blog banner if uploaded, otherwise null (primary color) ──
 const heroBgImage = computed(() => {
-    if (props.blogBanner) {
-        return props.blogBanner.startsWith('http') || props.blogBanner.startsWith('/') 
-            ? props.blogBanner 
-            : `/storage/${props.blogBanner}`;
+    if (props.blogBanner && typeof props.blogBanner === 'string' && props.blogBanner.trim() !== '') {
+        const val = props.blogBanner.trim();
+        return val.startsWith('http') || val.startsWith('/') 
+            ? val 
+            : `/storage/${val}`;
     }
     const sharedBanner = page.props.site?.blog_banner_url;
-    if (sharedBanner) {
-        return sharedBanner.startsWith('http') || sharedBanner.startsWith('/') 
-            ? sharedBanner 
-            : `/storage/${sharedBanner}`;
+    if (sharedBanner && typeof sharedBanner === 'string' && sharedBanner.trim() !== '') {
+        const val = sharedBanner.trim();
+        return val.startsWith('http') || val.startsWith('/') 
+            ? val 
+            : `/storage/${val}`;
     }
-    if (props.heroSlides && props.heroSlides.length > 0 && props.heroSlides[0]?.value) {
-        return props.heroSlides[0].value;
-    }
-    const slides = page.props.settings?.hero_slides;
-    if (slides && Array.isArray(slides) && slides.length > 0) {
-        return slides[0]?.value || slides[0];
-    }
-    return defaultBlogImage;
+    return null;
 });
 
 const search         = ref(props.filters?.search   || '');
@@ -128,27 +124,32 @@ const sidePosts    = computed(() => props.posts?.data?.slice(1, 4) || []);
         </Head>
 
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <!--  HERO BANNER — first homepage slider image                       -->
+        <!--  HERO BANNER — custom photo if uploaded, otherwise primary color -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section class="relative w-full overflow-hidden" style="height: 210px;">
+        <section class="relative w-full overflow-hidden bg-primary bg-gradient-to-r from-[#020B4F] via-[#06125E] to-[#020B4F] border-b border-navy-800" style="min-height: 210px;">
+            <!-- Subtle dot-grid overlay when primary color fills the background -->
+            <div class="absolute inset-0 bg-[radial-gradient(#ffffff0f_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none"></div>
+
             <img
+                v-if="heroBgImage && !bannerFailed"
                 :src="heroBgImage"
                 alt="Engineering Blog"
                 class="absolute inset-0 w-full h-full object-cover object-center"
                 loading="eager"
-                @error="handleImageError"
+                @error="bannerFailed = true"
             />
-            <div class="absolute inset-0 bg-black/45"></div>
-            <div class="relative z-10 h-full flex flex-col items-center justify-center text-white gap-3">
-                <h1 class="text-4xl md:text-5xl font-black tracking-wide drop-shadow-lg font-['Outfit',sans-serif]">
+            <div v-if="heroBgImage && !bannerFailed" class="absolute inset-0 bg-black/45"></div>
+
+            <div class="relative z-10 min-h-[210px] flex flex-col items-center justify-center text-white gap-3 px-4 py-8">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-wide drop-shadow-lg font-['Outfit',sans-serif] text-center">
                     Engineering Blog
                 </h1>
                 <nav class="flex items-center gap-2 text-sm font-medium text-white/80">
-                    <Link :href="route('home')" class="hover:text-white transition-colors">Home</Link>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <Link :href="route('home')" class="hover:text-[#F5A800] transition-colors">Home</Link>
+                    <svg class="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
-                    <span class="text-white">Engineering Blog</span>
+                    <span class="text-[#F5A800] font-semibold">Blog</span>
                 </nav>
             </div>
         </section>

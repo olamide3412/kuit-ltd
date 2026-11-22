@@ -20,7 +20,7 @@ class SitemapTest extends TestCase
         $this->assertStringContainsString('<?xml version="1.0" encoding="UTF-8"?>', $content);
         $this->assertStringContainsString('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', $content);
         $this->assertStringContainsString('/services', $content);
-        $this->assertStringContainsString('/solar-calculator', $content);
+        $this->assertStringContainsString('/equipment', $content);
         $this->assertStringContainsString('/packages', $content);
         $this->assertStringContainsString('/privacy-policy', $content);
     }
